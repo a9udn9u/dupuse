@@ -11,6 +11,8 @@ export class Helicopter extends Enemy {
     super(scene, x, y, CONFIG.enemies.helicopter);
     this.sprite.setTexture('enemy_helicopter');
     this.sprite.setDisplaySize(64, 48);
+    this.sprite.body.setSize(40, 28);
+    this.sprite.body.setOffset(12, 12);
     this.detectionRange = 450;
     this.flyY = y || 120;
     this.bombTimer = 0;

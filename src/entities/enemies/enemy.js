@@ -36,6 +36,9 @@ export class Enemy {
     this.sprite.setCollideWorldBounds(true);
     this.sprite.setBounce(0);
     this.sprite.setDepth(5);
+    // Tighter hitbox
+    this.sprite.body.setSize(20, 38);
+    this.sprite.body.setOffset(6, 6);
 
     // Bullet group for this enemy
     this.bulletGroup = scene.physics.add.group();

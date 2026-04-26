@@ -39,6 +39,8 @@ export class Boss {
     this.sprite.setBounce(0);
     this.sprite.setDepth(6);
     this.sprite.body.setAllowGravity(false);
+    this.sprite.body.setSize(60, 70);
+    this.sprite.body.setOffset(18, 14);
 
     // Bullet group
     this.bulletGroup = scene.physics.add.group();

@@ -10,6 +10,8 @@ export class Turret extends Enemy {
     super(scene, x, y, CONFIG.enemies.turret);
     this.sprite.setTexture('enemy_turret');
     this.sprite.setDisplaySize(48, 48);
+    this.sprite.body.setSize(30, 36);
+    this.sprite.body.setOffset(9, 8);
     this.detectionRange = 500;
     this.shootInterval = CONFIG.enemies.turret.shootInterval;
   }

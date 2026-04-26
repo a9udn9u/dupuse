@@ -53,6 +53,9 @@ export class Player {
     this.sprite.setBounce(0);
     this.sprite.setTint(colors.body);
     this.sprite.setDepth(10 + playerNum);
+    // Tighter hitbox (texture is 32x48)
+    this.sprite.body.setSize(20, 38);
+    this.sprite.body.setOffset(6, 6);
 
     // Set initial animation
     this._setAnimation('idle');
