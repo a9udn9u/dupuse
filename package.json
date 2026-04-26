@@ -1,0 +1,17 @@
+{
+  "name": "dupuse",
+  "version": "1.0.0",
+  "description": "A Contra-like run & gun platformer built with Phaser 3. 1-4 player local co-op, procedural assets/audio with real-asset swap support.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 9080 -o",
+    "serve": "npx http-server -p 9080"
+  },
+  "keywords": ["phaser", "platformer", "contra", "run-and-gun"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "phaser": "^3.80.1"
+  }
+}
