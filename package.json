@@ -7,11 +7,16 @@
     "start": "npx http-server -p 9080 -o",
     "serve": "npx http-server -p 9080"
   },
-  "keywords": ["phaser", "platformer", "contra", "run-and-gun"],
+  "keywords": [
+    "phaser",
+    "platformer",
+    "contra",
+    "run-and-gun"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "phaser": "^3.80.1"
+    "phaser": "^3.90.0"
   }
 }

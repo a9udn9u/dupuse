@@ -129,7 +129,7 @@ export class Boss {
     this.sprite.body.setVelocityY(0);
 
     // Flip sprite
-    this.sprite.setScaleX(this.moveDir > 0 ? -1 : 1);
+    this.sprite.setFlipX(this.moveDir > 0);
   }
 
   _spreadShot() {

@@ -16,38 +16,26 @@ export class ProceduralAssetGenerator {
   static generateAll(scene) {
     const tx = scene.textures;
 
-    // Player sprite sheet
-    this._generatePlayer(tx);
-
-    // Enemies
-    this._generateEnemySoldier(tx);
-    this._generateEnemyTurret(tx);
-    this._generateEnemyHelicopter(tx);
-
-    // Boss
-    this._generateBoss(tx);
-
-    // Power-ups
-    this._generatePowerUps(tx);
-
-    // Tileset
-    this._generateTileset(tx);
-
-    // Projectiles
+    // Single-frame textures (use addCanvas - works fine for single frames)
     this._generateBullet(tx);
     this._generateEnemyBullet(tx);
     this._generateMissile(tx);
     this._generateFlame(tx);
-
-    // UI
     this._generateHeart(tx);
     this._generateHeartEmpty(tx);
-    this._generateWeaponIcons(tx);
-
-    // Background tiles
     this._generateBgLayer1(tx);
     this._generateBgLayer2(tx);
     this._generateBgLayer3(tx);
+
+    // Sprite sheet textures (use addCanvas + texture.add with correct signature)
+    this._generatePlayer(tx);
+    this._generateEnemySoldier(tx);
+    this._generateEnemyTurret(tx);
+    this._generateEnemyHelicopter(tx);
+    this._generateBoss(tx);
+    this._generatePowerUps(tx);
+    this._generateTileset(tx);
+    this._generateWeaponIcons(tx);
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────
@@ -78,6 +66,7 @@ export class ProceduralAssetGenerator {
 
   /**
    * Register a sprite sheet texture with frame data.
+   * Uses addCanvas (synchronous) then adds individual frames.
    * @param {Phaser.Textures.TextureManager} tx
    * @param {string} key
    * @param {HTMLCanvasElement} canvas
@@ -86,24 +75,19 @@ export class ProceduralAssetGenerator {
    * @param {number} totalFrames
    */
   static _registerSpriteSheet(tx, key, canvas, frameW, frameH, totalFrames) {
-    // Add the canvas as a texture
+    // addCanvas creates the texture with a single 'default' frame
     tx.addCanvas(key, canvas);
-    // Get the texture and add frame data
     const texture = tx.get(key);
-    if (texture) {
-      // Clear default frame and add our frames
-      texture.removeFrame('default');
-      const cols = Math.floor(canvas.width / frameW);
-      for (let i = 0; i < totalFrames; i++) {
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        texture.add(i, {
-          x: col * frameW,
-          y: row * frameH,
-          width: frameW,
-          height: frameH,
-        });
-      }
+    if (!texture) return;
+    // Remove the auto-generated 'default' frame
+    try { texture.remove('default'); } catch (e) { /* ignore */ }
+    // Add individual frames: texture.add(name, sourceIndex, x, y, width, height)
+    // sourceIndex = 0 because addCanvas creates one TextureSource at index 0
+    const cols = Math.floor(canvas.width / frameW);
+    for (let i = 0; i < totalFrames; i++) {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      texture.add(i, 0, col * frameW, row * frameH, frameW, frameH);
     }
   }
 

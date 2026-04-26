@@ -63,7 +63,7 @@ export class Helicopter extends Enemy {
         break;
     }
 
-    this.sprite.setScaleX(this.patrolDir);
+    this.sprite.setFlipX(this.patrolDir < 0);
   }
 
   _dropBomb(target, time) {

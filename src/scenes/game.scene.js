@@ -98,6 +98,9 @@ export class GameScene extends Phaser.Scene {
   update(time, delta) {
     if (this.gameOver || this.isPaused) return;
 
+    // Update input FIRST so players read fresh state
+    this.inputManager.update();
+
     // Update all players
     let livingPlayer = null;
     this.players.forEach(player => {
@@ -142,9 +145,6 @@ export class GameScene extends Phaser.Scene {
 
     // Update HUD
     this.hud.update();
-
-    // Update input manager
-    this.inputManager.update();
 
     // Check game over
     if (!this.bossDefeated && this.players.every(p => !p.alive)) {
@@ -317,8 +317,10 @@ export class GameScene extends Phaser.Scene {
 
   // ─── Collision Handlers ──────────────────────────────────────────────
 
-  _onBulletHitEnemy(bullet, enemy) {
-    if (!bullet.active || !enemy.active) return;
+  _onBulletHitEnemy(bullet, enemySprite) {
+    if (!bullet.active || !enemySprite.active) return;
+    const enemy = enemySprite.enemyRef;
+    if (!enemy) return;
 
     const damage = bullet.damage || 1;
     enemy.takeDamage(damage);
@@ -360,15 +362,18 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  _onEnemyBulletHitPlayer(player, bullet) {
-    if (!player.alive || !bullet.active || player.invincible) return;
+  _onEnemyBulletHitPlayer(playerSprite, bullet) {
+    const player = playerSprite.playerRef;
+    if (!player || !player.alive || !bullet.active || player.invincible) return;
     bullet.destroy();
     player.takeDamage(1);
     SoundManager.play('hit');
   }
 
-  _onPlayerCollectPowerUp(player, powerUp) {
-    if (!player.alive || !powerUp.active) return;
+  _onPlayerCollectPowerUp(playerSprite, powerUpSprite) {
+    const player = playerSprite.playerRef;
+    const powerUp = powerUpSprite.powerUpRef;
+    if (!player || !player.alive || !powerUp || !powerUp.active) return;
     powerUp.collect(player);
     powerUp.destroy();
   }

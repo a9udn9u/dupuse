@@ -50,6 +50,6 @@ export class Soldier extends Enemy {
     }
 
     // Flip sprite based on direction
-    this.sprite.setScaleX(this.patrolDir);
+    this.sprite.setFlipX(this.patrolDir < 0);
   }
 }

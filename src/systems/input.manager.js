@@ -20,6 +20,7 @@ export class InputManager {
     this.playerCount = playerCount;
     this.keys = {}; // cached key references
     this.state = {}; // current input state per player
+    this.prevDown = {}; // previous frame isDown state for edge detection
 
     this._captureKeys();
     this._resetState();
@@ -79,7 +80,14 @@ export class InputManager {
   }
 
   _wasJustPressed(key) {
-    return key && key.justPressed;
+    if (!key) return false;
+    const isDown = key.isDown;
+    // Use the key object itself as the map key for previous state tracking
+    if (!this._prevDown) this._prevDown = {};
+    const wasDown = this._prevDown[key] || false;
+    const justPressed = isDown && !wasDown;
+    this._prevDown[key] = isDown;
+    return justPressed;
   }
 
   /**

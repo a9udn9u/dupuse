@@ -73,7 +73,7 @@ export const CONFIG = {
 
   // --- Input mappings (1-4 players) ---
   input: {
-    1: { left: 'a', right: 'd', up: 'w', down: 's', shoot: 'space', jump: 'f', crouch: 's' },
+    1: { left: 'a', right: 'd', up: 'w', down: 's', shoot: 'j', jump: 'k', crouch: 's' },
     2: { left: 'arrowleft', right: 'arrowright', up: 'arrowup', down: 'arrowdown', shoot: 'enter', jump: 'numpad0', crouch: 'arrowdown' },
     3: { left: 'j', right: 'l', up: 'i', down: 'k', shoot: 'u', jump: 'o', crouch: 'k' },
     4: { left: '1', right: '3', up: '4', down: '2', shoot: '5', jump: '6', crouch: '2' },

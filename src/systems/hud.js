@@ -185,7 +185,7 @@ export class HUD {
   update() {
     if (this.boss && this.boss.alive && this.bossBarContainer.visible) {
       const fraction = this.boss.getHPFraction();
-      this.bossBarFill.setScaleX(fraction);
+      this.bossBarFill.setScale(fraction, 1);
       this.bossBarFill.x = -148 + (1 - fraction) * 148;
 
       // Color changes with HP

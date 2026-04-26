@@ -158,7 +158,6 @@ export class AssetRegistry {
   }
 
   static _loadProceduralAssets(scene) {
-    // Import the procedural generator dynamically
     import('./../assets/procedural.generator.js').then(module => {
       const generator = module.ProceduralAssetGenerator;
       generator.generateAll(scene);

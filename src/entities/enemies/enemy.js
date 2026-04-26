@@ -32,6 +32,7 @@ export class Enemy {
 
     // Create sprite
     this.sprite = scene.physics.add.sprite(x, y, this.textureKey);
+    this.sprite.enemyRef = this; // back-reference for collision callbacks
     this.sprite.setCollideWorldBounds(true);
     this.sprite.setBounce(0);
     this.sprite.setDepth(5);

@@ -47,7 +47,8 @@ export class Player {
     // Create sprite
     const colors = CONFIG.playerColors[playerNum] || CONFIG.playerColors[0];
     this.sprite = scene.physics.add.sprite(x, y, 'player');
-    this.sprite.setPlayerIndex(playerNum);
+    this.sprite.playerRef = this; // back-reference for collision callbacks
+    this.sprite.playerIndex = playerNum; // custom property, not a Phaser method
     this.sprite.setCollideWorldBounds(true);
     this.sprite.setBounce(0);
     this.sprite.setTint(colors.body);
@@ -130,7 +131,7 @@ export class Player {
 
     let onLadder = false;
     ladderTiles.getChildren().forEach(tile => {
-      if (tile.active && Phaser.Math.Intersects.Rectangle(
+      if (tile.active && Phaser.Geom.Intersects.RectangleToRectangle(
         this.sprite.getBounds(),
         tile.getBounds()
       )) {
@@ -186,7 +187,7 @@ export class Player {
     if (!ladderTiles) return false;
 
     for (const tile of ladderTiles.getChildren()) {
-      if (tile.active && Phaser.Math.Intersects.Rectangle(
+      if (tile.active && Phaser.Geom.Intersects.RectangleToRectangle(
         this.sprite.getBounds(),
         tile.getBounds()
       )) {

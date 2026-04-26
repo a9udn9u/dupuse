@@ -29,6 +29,7 @@ export class PowerUp {
     const frame = frameMap[type] || 0;
 
     this.sprite = scene.physics.add.sprite(x, y, 'powerup');
+    this.sprite.powerUpRef = this; // back-reference for collision callbacks
     this.sprite.setFrame(frame);
     this.sprite.setDisplaySize(32, 32);
     this.sprite.setCollideWorldBounds(true);
