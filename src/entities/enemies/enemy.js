@@ -28,7 +28,7 @@ export class Enemy {
     this.patrolDir = Math.random() > 0.5 ? 1 : -1;
     this.patrolTimer = 0;
     this.shootTimer = 0;
-    this.detectionRange = 400;
+    this.detectionRange = 700;
 
     // Create sprite
     this.sprite = scene.physics.add.sprite(x, y, this.textureKey);
@@ -68,7 +68,9 @@ export class Enemy {
           break;
         }
         this._detect(nearest);
-        if (dist < this.detectionRange * 0.6) {
+        // Shoot while detecting — engage the player early
+        this._shoot(nearest, time);
+        if (dist < this.detectionRange * 0.9) {
           this.state = 'chase';
         }
         break;
@@ -139,8 +141,28 @@ export class Enemy {
     this.patrolDir = dir;
   }
 
+  /**
+   * Check if this enemy is within the camera viewport (plus padding).
+   * Enemies off-screen shouldn't shoot — avoids wasting bullets and unfair deaths.
+   */
+  _isOnScreen(padding = 64) {
+    const cam = this.scene.cameras.main;
+    const left = cam.scrollX - padding;
+    const right = cam.scrollX + cam.width + padding;
+    const top = cam.scrollY - padding;
+    const bottom = cam.scrollY + cam.height + padding;
+    return (
+      this.sprite.x >= left &&
+      this.sprite.x <= right &&
+      this.sprite.y >= top &&
+      this.sprite.y <= bottom
+    );
+  }
+
   _shoot(target, time) {
     if (!target) return;
+    // Don't shoot if off-screen
+    if (!this._isOnScreen()) return;
 
     this.shootTimer += 16; // approximate frame time
     if (this.shootTimer < this.config.shootInterval) return;

@@ -13,7 +13,7 @@ export class Helicopter extends Enemy {
     this.sprite.setDisplaySize(64, 48);
     this.sprite.body.setSize(40, 28);
     this.sprite.body.setOffset(12, 12);
-    this.detectionRange = 450;
+    this.detectionRange = 700;
     this.flyY = y || 120;
     this.bombTimer = 0;
     this.bombInterval = 2500;
@@ -48,7 +48,9 @@ export class Helicopter extends Enemy {
         this.sprite.body.setVelocityX(0);
         this.sprite.body.setVelocityY(Math.sin(time * 0.003) * 20);
         this.patrolDir = nearest ? (nearest.x > this.sprite.x ? 1 : -1) : this.patrolDir;
-        if (dist < this.detectionRange * 0.6) this.state = 'chase';
+        // Shoot while detecting — engage the player early
+        this._shoot(nearest, time);
+        if (dist < this.detectionRange * 0.9) this.state = 'chase';
         else if (!nearest || dist > this.detectionRange * 1.5) this.state = 'patrol';
         break;
 
@@ -70,6 +72,8 @@ export class Helicopter extends Enemy {
 
   _dropBomb(target, time) {
     if (!target) return;
+    // Don't drop bombs if off-screen
+    if (!this._isOnScreen()) return;
 
     this.bombTimer += 16;
     if (this.bombTimer < this.bombInterval) return;

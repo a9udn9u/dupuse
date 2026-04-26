@@ -46,7 +46,7 @@ export const CONFIG = {
 
   // --- Enemies ---
   enemies: {
-    soldier: { hp: 3, speed: 60, shootInterval: 2000, damage: 1, bulletSpeed: 250, score: 100, color: 0x88aa44 },
+    soldier: { hp: 3, speed: 60, shootInterval: 8000, damage: 1, bulletSpeed: 250, score: 100, color: 0x88aa44 },
     turret:  { hp: 8, speed: 0,  shootInterval: 4800, damage: 1, bulletSpeed: 300, score: 200, color: 0x888888 },
     helicopter: { hp: 6, speed: 80, shootInterval: 2500, damage: 1, bulletSpeed: 200, score: 300, color: 0x666688 },
   },

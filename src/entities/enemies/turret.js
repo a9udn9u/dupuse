@@ -12,7 +12,7 @@ export class Turret extends Enemy {
     this.sprite.setDisplaySize(48, 48);
     this.sprite.body.setSize(30, 36);
     this.sprite.body.setOffset(9, 8);
-    this.detectionRange = 500;
+    this.detectionRange = 750;
     this.shootInterval = CONFIG.enemies.turret.shootInterval;
   }
 
@@ -38,6 +38,8 @@ export class Turret extends Enemy {
 
   _shoot(target, time) {
     if (!target) return;
+    // Don't shoot if off-screen
+    if (!this._isOnScreen()) return;
 
     this.shootTimer += 16;
     if (this.shootTimer < this.shootInterval) return;

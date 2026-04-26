@@ -9,7 +9,7 @@ export class Soldier extends Enemy {
   constructor(scene, x, y) {
     super(scene, x, y, CONFIG.enemies.soldier);
     this.sprite.setTexture('enemy_soldier');
-    this.detectionRange = 350;
+    this.detectionRange = 650;
   }
 
   get textureKey() { return 'enemy_soldier'; }
@@ -38,7 +38,9 @@ export class Soldier extends Enemy {
         }
         this.sprite.body.setVelocityX(0);
         this.patrolDir = nearest.x > this.sprite.x ? 1 : -1;
-        if (dist < this.detectionRange * 0.5) this.state = 'chase';
+        // Shoot at player while detecting
+        this._shoot(nearest, time);
+        if (dist < this.detectionRange * 0.85) this.state = 'chase';
         break;
 
       case 'chase':
