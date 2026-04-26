@@ -40,7 +40,7 @@ export const CONFIG = {
     normal: { name: 'Normal', fireRate: 180, damage: 1, bulletSpeed: 500, bulletCount: 1, spread: 0, color: 0xffffff, piercing: false },
     spread: { name: 'S-Fire', fireRate: 350, damage: 1, bulletSpeed: 450, bulletCount: 5, spread: 0.35, color: 0xff8800, piercing: false },
     laser:  { name: 'Laser',  fireRate: 250, damage: 2, bulletSpeed: 800, bulletCount: 1, spread: 0, color: 0x00ffff, piercing: true },
-    flame:  { name: 'Flame',  fireRate: 80,  damage: 1, bulletSpeed: 350, bulletCount: 1, spread: 0.15, color: 0xff4400, piercing: false, lifetime: 300 },
+    flame:  { name: 'Flame',  fireRate: 300,  damage: 2, bulletSpeed: 250, bulletCount: 1, spread: 0.15, color: 0xff4400, piercing: false, lifetime: 2000 },
   },
   powerUpDropChance: 0.35,
 

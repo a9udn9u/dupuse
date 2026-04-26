@@ -106,6 +106,9 @@ export class GameScene extends Phaser.Scene {
     this.players.forEach(player => {
       player.update(time, delta);
       if (player.alive && !livingPlayer) livingPlayer = player;
+      // Save for one-way platform detection in next frame's physics step
+      player.sprite._prevY = player.sprite.y;
+      player.sprite._prevVelY = player.sprite.body.velocity.y;
     });
 
     // Camera follow
@@ -261,13 +264,15 @@ export class GameScene extends Phaser.Scene {
     // Players vs ground
     this.players.forEach(player => {
       this.physics.add.collider(player.sprite, this.groundTiles);
-      this.physics.add.collider(player.sprite, this.platformTiles);
+      // One-way platforms: processCallback prevents collision when jumping through from below
+      this.physics.add.collider(player.sprite, this.platformTiles, null, this._oneWayPlatformCheck, this);
       this.physics.add.collider(player.sprite, this.destructibleTiles);
     });
 
     // Enemies vs ground (so they stand on tiles, not fall through)
     this.physics.add.collider(this.enemySpawner.enemyGroup, this.groundTiles);
-    this.physics.add.collider(this.enemySpawner.enemyGroup, this.platformTiles);
+    // Enemies also use one-way platforms
+    this.physics.add.collider(this.enemySpawner.enemyGroup, this.platformTiles, null, this._oneWayPlatformCheck, this);
     this.physics.add.collider(this.enemySpawner.enemyGroup, this.destructibleTiles);
 
     // Power-ups vs ground (fall and land on tiles)
@@ -321,6 +326,23 @@ export class GameScene extends Phaser.Scene {
         this
       );
     });
+  }
+
+  // ─── One-Way Platform (Contra-style: stand on top, jump through from below) ──
+  // processCallback: return false to let the character pass through, true to land on top
+
+  _oneWayPlatformCheck(character, platform) {
+    const platTop = platform.body.top;
+    const prevY = character._prevY !== undefined ? character._prevY : character.y;
+    const prevBottom = prevY + character.body.height / 2;
+    const prevVelY = character._prevVelY !== undefined ? character._prevVelY : 0;
+
+    // If character was below the platform and moving upward, pass through (no collision)
+    if (prevBottom > platTop && prevVelY < 0) {
+      return false;
+    }
+    // Otherwise: land on top (let the physics engine resolve the collision)
+    return true;
   }
 
   // ─── Collision Handlers ──────────────────────────────────────────────

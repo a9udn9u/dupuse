@@ -176,9 +176,9 @@ export class HUD {
 
   flashBossBar() {
     if (!this.bossBarFill) return;
-    this.bossBarFill.setTint(0xffffff);
+    this.bossBarFill.setFillStyle(0xffffff);
     this.scene.time.delayedCall(80, () => {
-      this.bossBarFill.clearTint();
+      // Next update() cycle will restore correct color
     });
   }
 
