@@ -51,6 +51,7 @@ export class WeaponManager {
     bullet.setActive(true);
     bullet.setVisible(true);
     bullet.setAlpha(1);
+    bullet.body.setAllowGravity(false);
 
     // Custom properties
     bullet.damage = weaponConfig.damage;
@@ -102,6 +103,7 @@ export class WeaponManager {
     bullet.setActive(true);
     bullet.setVisible(true);
     bullet.damage = damage;
+    bullet.body.setAllowGravity(false);
 
     // Auto-recycle
     this.scene.time.delayedCall(3000, () => {
@@ -131,6 +133,7 @@ export class WeaponManager {
     bullet.setActive(true);
     bullet.setVisible(true);
     bullet.damage = 1;
+    bullet.body.setAllowGravity(false);
     bullet.isMissile = true;
 
     this.scene.time.delayedCall(4000, () => {
