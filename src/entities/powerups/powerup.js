@@ -28,18 +28,18 @@ export class PowerUp {
     };
     const frame = frameMap[type] || 0;
 
+    // Dynamic sprite so it falls to the ground
     this.sprite = scene.physics.add.sprite(x, y, 'powerup');
     this.sprite.powerUpRef = this; // back-reference for collision callbacks
     this.sprite.setFrame(frame);
     this.sprite.setDisplaySize(32, 32);
-    this.sprite.setCollideWorldBounds(true);
     this.sprite.setDepth(8);
-    this.sprite.body.setAllowGravity(false);
-    this.sprite.body.setVelocity(0, 0);
+    this.sprite.setBounce(0);
 
-    // Bobbing animation
+    // Bobbing animation (only after landing)
     this.bobTimer = 0;
     this.startY = y;
+    this.landed = false;
 
     // Glow particles
     this._createGlow();
@@ -48,9 +48,22 @@ export class PowerUp {
   update(time, delta) {
     if (!this.active) return;
 
-    // Bob up and down
-    this.bobTimer += delta * 0.003;
-    this.sprite.y = this.startY + Math.sin(this.bobTimer) * 5;
+    if (!this.landed) {
+      // Falling: zero horizontal velocity, let gravity pull down
+      this.sprite.body.setVelocityX(0);
+      // Check if on ground
+      if (this.sprite.body.touching.down) {
+        this.landed = true;
+        this.startY = this.sprite.y;
+      }
+    } else {
+      // Landed: bob up and down in place
+      this.bobTimer += delta * 0.003;
+      const newY = this.startY + Math.sin(this.bobTimer) * 5;
+      this.sprite.y = newY;
+      this.sprite.body.y = newY;
+      this.sprite.body.setVelocity(0, 0);
+    }
 
     // Rotate slightly
     this.sprite.rotation = Math.sin(this.bobTimer * 0.5) * 0.1;

@@ -32,10 +32,13 @@ export class Soldier extends Enemy {
         break;
 
       case 'detect':
+        if (!nearest || dist > this.detectionRange * 1.5) {
+          this.state = 'patrol';
+          break;
+        }
         this.sprite.body.setVelocityX(0);
         this.patrolDir = nearest.x > this.sprite.x ? 1 : -1;
         if (dist < this.detectionRange * 0.5) this.state = 'chase';
-        else if (!nearest || dist > this.detectionRange * 1.5) this.state = 'patrol';
         break;
 
       case 'chase':

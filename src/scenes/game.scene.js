@@ -270,6 +270,9 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.enemySpawner.enemyGroup, this.platformTiles);
     this.physics.add.collider(this.enemySpawner.enemyGroup, this.destructibleTiles);
 
+    // Power-ups vs ground (fall and land on tiles)
+    this.physics.add.collider(this.enemySpawner.powerUpGroup, this.groundTiles);
+
     // Player bullets vs enemies
     this.physics.add.overlap(
       this.weaponManager.bulletGroup,

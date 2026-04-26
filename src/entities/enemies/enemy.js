@@ -60,20 +60,23 @@ export class Enemy {
         break;
 
       case 'detect':
+        if (!nearest || dist > this.detectionRange * 1.5) {
+          this.state = 'patrol';
+          break;
+        }
         this._detect(nearest);
         if (dist < this.detectionRange * 0.6) {
           this.state = 'chase';
-        } else if (!nearest || dist > this.detectionRange * 1.5) {
-          this.state = 'patrol';
         }
         break;
 
       case 'chase':
-        this._chase(nearest, time, delta);
-        this._shoot(nearest, time);
         if (!nearest || dist > this.detectionRange * 1.5) {
           this.state = 'patrol';
+          break;
         }
+        this._chase(nearest, time, delta);
+        this._shoot(nearest, time);
         break;
     }
   }
