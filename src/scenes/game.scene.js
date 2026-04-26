@@ -265,6 +265,11 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.collider(player.sprite, this.destructibleTiles);
     });
 
+    // Enemies vs ground (so they stand on tiles, not fall through)
+    this.physics.add.collider(this.enemySpawner.enemyGroup, this.groundTiles);
+    this.physics.add.collider(this.enemySpawner.enemyGroup, this.platformTiles);
+    this.physics.add.collider(this.enemySpawner.enemyGroup, this.destructibleTiles);
+
     // Player bullets vs enemies
     this.physics.add.overlap(
       this.weaponManager.bulletGroup,

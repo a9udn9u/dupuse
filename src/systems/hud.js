@@ -84,7 +84,7 @@ export class HUD {
     const startX = (CONFIG.gameWidth - this.playerCount * slotWidth) / 2;
 
     for (let i = 0; i < this.playerCount; i++) {
-      const container = this.scene.add.container(startX + i * slotWidth, CONFIG.gameHeight - 40);
+      const container = this.scene.add.container(startX + i * slotWidth, 18);
       container.setDepth(100).setScrollFactor(0);
 
       // Player number
