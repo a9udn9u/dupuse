@@ -21,7 +21,7 @@ export const CONFIG = {
   playerMaxHP: 3,          // configurable hit count before death
   playerSpeed: 160,
   playerCrouchSpeed: 60,
-  playerJumpVelocity: -380,
+  playerJumpVelocity: -520,
   playerClimbSpeed: 120,
   playerInvincibilityDuration: 1500, // ms after being hit
   playerShootCooldown: 180,  // ms between shots
