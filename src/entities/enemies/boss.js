@@ -24,6 +24,7 @@ export class Boss {
     this.hp = this.config.hp;
     this.maxHP = this.config.hp;
     this.phase = 1;
+    this.entering = true;
 
     // Timers
     this.shootTimer = 0;
@@ -32,10 +33,12 @@ export class Boss {
     this.moveTimer = 0;
     this.moveDir = -1;
 
-    // Create sprite
+    // Create sprite at given position, then animate entrance
     this.sprite = scene.physics.add.sprite(x, y, 'boss');
     this.sprite.setDisplaySize(96, 96);
-    this.sprite.setCollideWorldBounds(true);
+    // setCollideWorldBounds is enabled AFTER entrance animation completes
+    // to prevent physics from clamping the entrance tween
+    this.sprite.body.setCollideWorldBounds(false);
     this.sprite.setBounce(0);
     this.sprite.setDepth(6);
     this.sprite.body.setAllowGravity(false);
@@ -45,20 +48,33 @@ export class Boss {
     // Bullet group
     this.bulletGroup = scene.physics.add.group();
 
-    // Enter animation
+    // Entrance animation: move in from above using a tween.
+    // _move() is skipped while entering=true, so no conflict.
+    // NOTE: setCollideWorldBounds is enabled AFTER entrance in _enterAnimation
+    // to avoid physics fighting the tween (body would clamp to y=0 otherwise).
     this._enterAnimation();
   }
 
   _enterAnimation() {
-    const startY = -100;
+    // Disable world bounds during entrance so the tween can move the boss freely
+    this.sprite.body.setCollideWorldBounds(false);
+
+    // Start above the visible area (gameHeight=450, start at y=-120)
+    const startY = -120;
     this.sprite.setY(startY);
 
     this.scene.tweens.add({
       targets: this.sprite,
-      y: this.sprite.y + 150,
-      duration: 1500,
+      y: 60,
+      duration: 1200,
       ease: 'Power2',
       onComplete: () => {
+        this.entering = false;
+        // Re-enable world bounds after entrance is complete
+        // Guard: sprite/body may be null if scene was shut down during the tween
+        if (this.sprite && this.sprite.body) {
+          this.sprite.body.setCollideWorldBounds(true);
+        }
         SoundManager.play('bossRoar');
       },
     });
@@ -67,11 +83,16 @@ export class Boss {
   update(time, delta) {
     if (!this.alive) return;
 
+    // Guard: sprite body may be null during scene transitions or if destroyed
+    if (!this.sprite || !this.sprite.body) return;
+
     // Check phase transitions
     this._checkPhase();
 
-    // Movement — patrol back and forth
-    this._move(delta);
+    // Movement — patrol back and forth (skip during entrance animation)
+    if (!this.entering) {
+      this._move(delta);
+    }
 
     // Attacks based on phase
     this.shootTimer += delta;
@@ -121,6 +142,8 @@ export class Boss {
   }
 
   _move(delta) {
+    if (!this.sprite || !this.sprite.body) return;
+
     this.moveTimer += delta;
     if (this.moveTimer > 3000 + Math.random() * 2000) {
       this.moveDir *= -1;

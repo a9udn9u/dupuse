@@ -1,7 +1,7 @@
 /**
  * InputManager — Handles keyboard input for 1-4 players.
  *
- * Key mappings (from CONFIG.input):
+ * Key mappings (from CONFIG.input, overridable via localStorage 'dupuse_keybindings'):
  *   P1: WASD + Space (shoot) + F (jump)
  *   P2: Arrows + Enter (shoot) + Numpad0 (jump)
  *   P3: IJKL + U (shoot) + O (jump)
@@ -9,6 +9,42 @@
  */
 
 import { CONFIG } from '../config/game.config.js';
+
+const STORAGE_KEY = 'dupuse_keybindings';
+
+/**
+ * Load saved keybindings from localStorage, merging over the defaults.
+ */
+export function loadKeybindings() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (_) { /* ignore */ }
+  return null;
+}
+
+/**
+ * Save keybindings to localStorage.
+ * @param {object} bindings - e.g. { "1": { left: "a", right: "d", ... }, "2": {...} }
+ */
+export function saveKeybindings(bindings) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(bindings));
+  } catch (_) { /* ignore */ }
+}
+
+/**
+ * Get the effective input mapping for a given 1-indexed player number,
+ * merging saved bindings over the defaults.
+ */
+export function getEffectiveMapping(playerNum) {
+  const defaults = CONFIG.input[playerNum];
+  if (!defaults) return null;
+  const saved = loadKeybindings();
+  const overrides = saved ? saved[String(playerNum)] : null;
+  if (!overrides) return { ...defaults };
+  return { ...defaults, ...overrides };
+}
 
 export class InputManager {
   /**
@@ -30,7 +66,7 @@ export class InputManager {
     const kb = this.scene.input.keyboard;
 
     for (let p = 0; p < this.playerCount; p++) {
-      const mapping = CONFIG.input[p + 1]; // CONFIG is 1-indexed
+      const mapping = getEffectiveMapping(p + 1); // CONFIG is 1-indexed
       if (!mapping) continue;
 
       this.keys[p] = {};

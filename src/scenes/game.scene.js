@@ -287,14 +287,8 @@ export class GameScene extends Phaser.Scene {
       this
     );
 
-    // Player bullets vs boss
-    this.physics.add.overlap(
-      this.weaponManager.bulletGroup,
-      this.boss ? this.boss.sprite : null,
-      this._onBulletHitBoss,
-      null,
-      this
-    );
+    // Player bullets vs boss — set up in _triggerBoss when boss is created
+    // (no overlap added here because this.boss is null at create time)
 
     // Player bullets vs destructible tiles
     this.physics.add.overlap(

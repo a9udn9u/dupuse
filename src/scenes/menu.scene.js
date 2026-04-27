@@ -72,12 +72,30 @@ export class MenuScene extends Phaser.Scene {
       this.slotButtons.push({ bg, text });
     }
 
-    // Start button
-    const startBg = this.add.rectangle(CONFIG.gameWidth / 2, 340, 180, 40, 0x44aa44)
+    // Remap Keys button
+    const remapBg = this.add.rectangle(CONFIG.gameWidth / 2, 310, 180, 30, 0x666666)
       .setInteractive({ useHandCursor: true })
       .setDepth(10);
 
-    const startText = this.add.text(CONFIG.gameWidth / 2, 340, 'START', {
+    const remapText = this.add.text(CONFIG.gameWidth / 2, 310, 'REMAP KEYS', {
+      fontSize: '14px',
+      fontFamily: 'monospace',
+      color: '#cccccc',
+    }).setOrigin(0.5).setDepth(11);
+
+    remapBg.on('pointerover', () => { remapBg.setFillStyle(0x888888); remapText.setColor('#ffffff'); });
+    remapBg.on('pointerout', () => { remapBg.setFillStyle(0x666666); remapText.setColor('#cccccc'); });
+    remapBg.on('pointerdown', () => {
+      SoundManager.play('powerUp');
+      this.scene.start('RemapScene');
+    });
+
+    // Start button
+    const startBg = this.add.rectangle(CONFIG.gameWidth / 2, 355, 180, 40, 0x44aa44)
+      .setInteractive({ useHandCursor: true })
+      .setDepth(10);
+
+    const startText = this.add.text(CONFIG.gameWidth / 2, 355, 'START', {
       fontSize: '20px',
       fontFamily: 'monospace',
       color: '#ffffff',
@@ -92,7 +110,7 @@ export class MenuScene extends Phaser.Scene {
     this.input.keyboard.on('keydown-SPACE', () => this._startGame());
 
     // Controls info
-    const controlsY = 400;
+    const controlsY = 420;
     this.add.text(CONFIG.gameWidth / 2, controlsY, 'CONTROLS:', {
       fontSize: '12px',
       fontFamily: 'monospace',

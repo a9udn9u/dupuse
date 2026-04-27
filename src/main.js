@@ -7,6 +7,7 @@
 import { CONFIG } from './config/game.config.js';
 import { BootScene } from './scenes/boot.scene.js';
 import { MenuScene } from './scenes/menu.scene.js';
+import { RemapScene } from './scenes/remap.scene.js';
 import { GameScene } from './scenes/game.scene.js';
 import { GameOverScene } from './scenes/gameover.scene.js';
 import { VictoryScene } from './scenes/victory.scene.js';
@@ -28,7 +29,7 @@ const config = {
       debug: false,
     },
   },
-  scene: [BootScene, MenuScene, GameScene, GameOverScene, VictoryScene],
+  scene: [BootScene, MenuScene, RemapScene, GameScene, GameOverScene, VictoryScene],
 };
 
 const game = new Phaser.Game(config);
