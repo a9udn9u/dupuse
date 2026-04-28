@@ -73,11 +73,13 @@ export class MenuScene extends Phaser.Scene {
     }
 
     // Remap Keys button
-    const remapBg = this.add.rectangle(CONFIG.gameWidth / 2, 310, 180, 30, 0x666666)
+    const remapX = CONFIG.gameWidth / 2 - 110;
+    const buttonY = 340;
+    const remapBg = this.add.rectangle(remapX, buttonY, 180, 40, 0x666666)
       .setInteractive({ useHandCursor: true })
       .setDepth(10);
 
-    const remapText = this.add.text(CONFIG.gameWidth / 2, 310, 'REMAP KEYS', {
+    const remapText = this.add.text(remapX, buttonY, 'REMAP KEYS', {
       fontSize: '14px',
       fontFamily: 'monospace',
       color: '#cccccc',
@@ -91,11 +93,12 @@ export class MenuScene extends Phaser.Scene {
     });
 
     // Start button
-    const startBg = this.add.rectangle(CONFIG.gameWidth / 2, 355, 180, 40, 0x44aa44)
+    const startX = CONFIG.gameWidth / 2 + 110;
+    const startBg = this.add.rectangle(startX, buttonY, 180, 40, 0x44aa44)
       .setInteractive({ useHandCursor: true })
       .setDepth(10);
 
-    const startText = this.add.text(CONFIG.gameWidth / 2, 355, 'START', {
+    const startText = this.add.text(startX, buttonY, 'START', {
       fontSize: '20px',
       fontFamily: 'monospace',
       color: '#ffffff',
