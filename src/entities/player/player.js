@@ -331,9 +331,10 @@ export class Player {
     this.sprite.setAlpha(0.3);
     SoundManager.play('death');
 
-    // Respawn after delay if other players are alive
-    const hasLivingPlayers = this.scene.players.some(p => p !== this && p.alive);
-    if (hasLivingPlayers) {
+    // Respawn after delay if at least half the players are still alive
+    const aliveCount = this.scene.players.filter(p => p !== this && p.alive).length;
+    const threshold = Math.ceil(this.scene.players.length / 2);
+    if (aliveCount >= threshold) {
       this.scene.time.delayedCall(3000, () => this.respawn());
     }
   }
