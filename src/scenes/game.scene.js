@@ -356,7 +356,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   _onBulletHitBoss(bullet, bossSprite) {
-    if (!bullet.active || !this.boss || !this.boss.alive) return;
+    if (!bullet.active || !bossSprite.active) return;
+    if (!this.boss || !this.boss.alive) return;
+    // Safety: ensure bossSprite is the actual boss
+    if (bossSprite !== this.boss.sprite) return;
 
     const damage = bullet.damage || 1;
     this.boss.takeDamage(damage);
@@ -447,10 +450,15 @@ export class GameScene extends Phaser.Scene {
     const bossData = this.levelData.boss;
     this.boss = new Boss(this, bossData.x, bossData.y || 200);
 
-    // Update boss collision now that boss exists
+    // Wrap boss sprite in a group so overlap callback gets correct param order.
+    // Passing a single sprite directly to physics.add.overlap can swap the
+    // callback arguments, causing bullet.destroy() to destroy the boss sprite.
+    this.bossGroup = this.physics.add.group();
+    this.bossGroup.add(this.boss.sprite);
+
     this.physics.add.overlap(
       this.weaponManager.bulletGroup,
-      this.boss.sprite,
+      this.bossGroup,
       this._onBulletHitBoss,
       null,
       this
